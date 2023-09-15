@@ -1,0 +1,9 @@
+#----------------------------------------------About----------------------------------------------#
+Name:    BestPaint
+Version: 0.2.0
+Author: Chisom Ogbuefi
+
+Description: OGPaint is a Java-based interpretation on Microsoft Paint and intends to
+emulate and improve Microsoft Paint's features and abilities.
+
+#-------------------------------------------------------------------------------------------------#

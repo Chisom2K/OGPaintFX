@@ -1,0 +1,43 @@
+#---------------------------------------------------------------------------------------------#
+
+Version 0.2.0 (9/16/23)
+New Features:
+	- About and Help
+		- If you're confused, those are the best places to go for info
+	- Draw line
+		- Drag and release to draw a line from point A to point B
+	- Resize image
+		- basically just scroll bars
+	- Tab
+		- Currently only one can be opened but in the future more tabs can be
+		  added
+	- Paint Tools
+		- Sits right under the Menu Bar; all of the tools you'll need to paint 
+		  things
+Features in-progress:
+	- Random color
+		- Gives the user a random color at the click of a button
+	- More Tabs
+	- "Don't show me the release notes again" checkbox
+Bugs:
+	- Closing the tab is not good and requires a reboot
+#---------------------------------------------------------------------------------------------#
+
+Version 0.1.0 (09/08/23)
+New Features:
+	- Cool menu bar
+		- Only two options, "Files" and "Release"
+	- Open most (if not all) image files
+	- Saves Images
+	- Saves as Images
+	- Safe exit
+		- We'll ask if you're sure about exiting so that you don't exit if you 
+		  didn't *really* want to
+Features in-progress:
+	- "I'm feeling lucky"
+		- Choose a folder (with at least 1 image) and it will randomly choose an
+		  image for you!
+	- random color button
+		- Gives the user a random color at the click of a button
+Bugs:
+	- Menu bar disappears if you've got a big image

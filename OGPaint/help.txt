@@ -1,0 +1,14 @@
+#-----------------------------------------------Help----------------------------------------------#
+
+ - File: has all of the file operations you can perform such as saving and opening files
+	- New file: 	     opens a blank file
+	- Open file: 	     opens an image file (restricted to 3 or so image file types)
+	- Save file: 	     saves the changes to the currently opened file
+	- Save file as:      saves the currently opened file to the specified file path
+	- Exit:		     safely exits the program
+
+ - Help: has all of the information and assistance options
+	- About: 	     has the version and author information as well as a short descr.
+	- Help:		     opens a tab that offers descriptions on each option
+
+#-------------------------------------------------------------------------------------------------#
