@@ -41,3 +41,6 @@ Features in-progress:
 		- Gives the user a random color at the click of a button
 Bugs:
 	- Menu bar disappears if you've got a big image
+#---------------------------------------------------------------------------------------------#
+Links:
+	-Github: https://github.com/Chisom2K/OGPaintFX.git
