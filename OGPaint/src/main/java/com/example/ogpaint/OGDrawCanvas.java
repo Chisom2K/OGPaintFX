@@ -28,6 +28,104 @@ public class OGDrawCanvas extends Canvas {
         this.gc.setLineCap(StrokeLineCap.ROUND);
     }
 
+    /**
+     * Draws a rectangle from (x1,y1) to (x2,y2)
+     * @param x1 Initial x
+     * @param y1 Initial y
+     * @param x2 Ending x
+     * @param y2 Ending y
+     */
+    public void drawRect(double x1, double y1, double x2, double y2){
+        double x = (x1 < x2 ? x1 : x2); //set x to the smaller of the two values to map to bottom left
+        double y = (y1 < y2 ? y1 : y2); //
+        double w = Math.abs(x1 - x2);   //abs val of the two x's = length of x
+        double h = Math.abs(y1 - y2);
+        if(this.getFillShape())
+            this.gc.fillRect(x,y,w,h);
+        this.gc.strokeRect(x,y,w,h);
+    }
+
+    /**
+     * Draws a square from (x1,y1) to (x2,y2)
+     * @param x1 Initial x
+     * @param y1 Initial y
+     * @param x2 Ending x
+     * @param y2 Ending y
+     */
+    public void drawSquare(double x1, double y1, double x2, double y2){
+        final double ANGLE_45 = Math.PI/4.0;    //pi/4 is a 45 degree angle, which makes it square instead of a diamond
+        final int SIDES = 4;
+        double[] xPoints = new double[SIDES];   //4 is the number of sides a square has
+        double[] yPoints = new double[SIDES];
+        double radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+        //try and figure out how to fix later
+        for(int i = 0; i < SIDES; i++){
+            xPoints[i] = x1 + (radius * Math.cos(((2*Math.PI*i)/4) + ANGLE_45));
+            yPoints[i] = y1 + (radius * Math.sin(((2*Math.PI*i)/4) + ANGLE_45));
+        }
+        if(this.getFillShape())
+            this.gc.fillPolygon(xPoints, yPoints, SIDES);
+        this.gc.strokePolygon(xPoints, yPoints, SIDES);
+    }
+
+    /**
+     * Draws a triangle given three points (x1, y1), (x2, y2), and (x3, y3).
+     * @param x1 X-coordinate of the first point.
+     * @param y1 Y-coordinate of the first point.
+     * @param x2 X-coordinate of the second point.
+     * @param y2 Y-coordinate of the second point.
+     * @param x3 X-coordinate of the third point.
+     * @param y3 Y-coordinate of the third point.
+     */
+    public void drawTriangle(double x1, double y1, double x2, double y2, double x3, double y3) {
+        double[] xPoints = {x1, x2, x3};
+        double[] yPoints = {y1, y2, y3};
+
+        if (this.getFillShape())
+            this.gc.fillPolygon(xPoints, yPoints, 3); // 3 points for a triangle
+        this.gc.strokePolygon(xPoints, yPoints, 3); // 3 points for a triangle
+    }
+
+    /**
+     * Draws an ellipse from (x1,y1) to (x2,y2)
+     * @param x1 Initial x
+     * @param y1 Initial y
+     * @param x2 Ending x
+     * @param y2 Ending y
+     */
+    public void drawEllipse(double x1, double y1, double x2, double y2){
+        double x = (x1 < x2 ? x1 : x2);
+        double y = (y1 < y2 ? y1 : y2);
+        double w = Math.abs(x1 - x2);
+        double h = Math.abs(y1 - y2);
+        if(this.getFillShape())
+            this.gc.fillOval(x,y,w,h);
+        this.gc.strokeOval(x,y,w,h);
+    }
+
+    /**
+     * Draws an n-sided polygon given the center (x1, y1) and point on the radius (x2, y2)
+     * @param x1 The x coordinate for a center of a circumscribed circle
+     * @param y1 The y coordinate for a center of a circumscribed circle
+     * @param x2 An x coordinate that represents a tangent point on a circle
+     * @param y2 An y coordinate that represents a tangent point on a circle
+     * @param n The number of sides/vertices
+     */
+    public void drawNgon(double x1, double y1, double x2, double y2, int n){
+        double[] xPoints = new double[n];
+        double[] yPoints = new double[n];
+        double radius = Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+        double startAngle = Math.atan2(y2 - y1, x2 - x1);
+        //try and figure out how to fix later
+        for(int i = 0; i < n; i++){
+            xPoints[i] = x1 + (radius * Math.cos(((2*Math.PI*i)/n) + startAngle));
+            yPoints[i] = y1 + (radius * Math.sin(((2*Math.PI*i)/n) + startAngle));
+        }
+        if(this.getFillShape())
+            this.gc.fillPolygon(xPoints, yPoints, n);
+        this.gc.strokePolygon(xPoints, yPoints, n);
+    }
+
     public void drawLine(double x1, double y1, double x2, double y2){gc.strokeLine(x1, y1, x2, y2);}
 
     /**

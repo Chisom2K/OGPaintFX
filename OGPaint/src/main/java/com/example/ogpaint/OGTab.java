@@ -257,4 +257,27 @@ public class OGTab extends Tab {
         OGToolBar.setZoomLabel(this.getScale());
     }
 
+    /**
+     * Undoes the previous change to the image and draws to canvas
+     */
+    public void undo(){
+        this.canvas.undo();
+        this.setUnsavedChanges(true);
+    }
+    /**
+     * Redoes the change that you undid and draws to canvas
+     */
+    public void redo(){
+        this.canvas.redo();
+        this.setUnsavedChanges(true);
+    }
+    /**
+     * Updates the stacks
+     */
+    public void updateStacks(){
+        this.canvas.updateStacks();
+        this.setUnsavedChanges(true);
+        this.updateTabTitle();
+    }
+
 }

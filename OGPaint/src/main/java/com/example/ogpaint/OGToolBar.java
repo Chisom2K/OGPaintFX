@@ -24,11 +24,12 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 public class OGToolBar extends ToolBar {
-    private final static String[] DRAW_TOOLS = {"Freehand"};
+    private final static String[] DRAW_TOOLS = {"None", "Line", "Freehand", "Rectangle",
+             "Square", "Ellipse", "Circle","Triangle"};
     private final static Integer[] LINE_WIDTH_VALS = {1,2,5,10,15,20,25,50,100};
 
     private final Button RND_COLOR_BUTTON;
-    private final Button RNBW_FUN_BUTTON;
+
 
     private static ComboBox<String> toolsBox;
     private static ComboBox<Integer> widthsBox;
@@ -53,8 +54,8 @@ public class OGToolBar extends ToolBar {
 
 
         RND_COLOR_BUTTON = new Button("");
-        RNBW_FUN_BUTTON = new Button("");
 
+        numSides = new TextField("3");
         toolsBox = new ComboBox<>(FXCollections.observableArrayList(DRAW_TOOLS));
         widthsBox = new ComboBox<>(FXCollections.observableArrayList(LINE_WIDTH_VALS));
         zoomLabel = new Label("100%");
@@ -65,8 +66,7 @@ public class OGToolBar extends ToolBar {
 
         getItems().addAll(new Label(" Tools: "), toolsBox, new Separator(),
                 new Label(" Line Color: "), lineColorPicker, new Label(" Fill Color: "),
-                fillColorPicker, RND_COLOR_BUTTON, new Separator(), RNBW_FUN_BUTTON,
-                new Separator(), new Label("Zoom: "), zoomLabel,new Separator(), new Label(" Line Width: "), widthsBox, new Label(" Fill "),
+                fillColorPicker, RND_COLOR_BUTTON, new Separator(), new Label("Zoom: "), zoomLabel,new Separator(), new Label(" Line Width: "), widthsBox, new Label(" Fill "),
                 setFill, new Separator());
 
         //setting the default values for things that look bad w/o them
@@ -78,22 +78,54 @@ public class OGToolBar extends ToolBar {
         widthsBox.setPrefWidth(90);
         widthsBox.setValue(1);
 
+        numSides.setVisible(false);
+        numSides.setPrefWidth(55);
+
 
         RND_COLOR_BUTTON.setTooltip(new Tooltip("Random Fill and Line Color"));
-        RNBW_FUN_BUTTON.setTooltip(new Tooltip("Rainbow Fun Mode"));
+
 
         try {
             //setting graphics on buttons
-            int size = 21;
-        RND_COLOR_BUTTON.setGraphic(new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "random.png"), size, size, true, true)));
-        RNBW_FUN_BUTTON.setGraphic(new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "rainbow.png"), size, size, true, true)));
+            int size = 30;
+        RND_COLOR_BUTTON.setGraphic(new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png"), size, size, true, true)));
+        //new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png)"), size, size, true, true))
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OGToolBar.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+
+        //listeners
+        toolsBox.getSelectionModel().selectedIndexProperty().addListener((observable, value, newValue) -> {
+            usingTool = newValue.intValue();
+            if(DRAW_TOOLS[usingTool].equals("N-gon"))   //enables the text input for the n-gon option and disables it otherwise
+                numSides.setVisible(true);
+            else
+                numSides.setVisible(false);
+        });     //changes the index of the tool being used to whatever was selected
+        widthsBox.getEditor().focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if(!isNowFocused){
+                if(Integer.parseInt(widthsBox.getEditor().getText()) >= 1){
+                    widthsBox.setValue(Integer.parseInt(widthsBox.getEditor().getText()));
+                }
+                else{
+                    widthsBox.setValue(1);
+                }
+            }   //listens to the ComboBox TextInput; if it changes it sets the value to whatever was input
+        });
+        numSides.textProperty().addListener((observable, value, newValue) -> {
+            if(Integer.parseInt(newValue) >= 3)
+                usingNumSides = Integer.parseInt(newValue);
+            else{
+                numSides.setText("3");
+            }
+        });     //listens and returns num of sides to use in ngon
+
         widthsBox.setOnAction((ActionEvent e) -> {   //changes the value of usingWidth when the ComboBox is used/value changes
             usingWidth = widthsBox.getValue();
         });
+
 
         RND_COLOR_BUTTON.setOnAction((ActionEvent e) -> { //changes the colors in the fill and line color pickers to the same rand color
             double[] rgb = {rnd.nextDouble(),rnd.nextDouble(),rnd.nextDouble()};    //gets rand vals for RGB from 0 to 1
@@ -102,17 +134,7 @@ public class OGToolBar extends ToolBar {
             fillColorPicker.setValue(randCol);
         });
         //mode buttons
-        RNBW_FUN_BUTTON.setOnAction((ActionEvent e) -> {
-            WritableImage wi = new WritableImage(
-                    (int) OGPaint.getCurrentTab().getCanvasWidth(),
-                    (int) OGPaint.getCurrentTab().getCanvasHeight());
-            PixelWriter pw = wi.getPixelWriter();
-            for(int y = 0; y < wi.getHeight(); y++)
-                for(int x = 0; x < wi.getWidth(); x++)
-                    pw.setColor(x, y, Color.color(rnd.nextDouble(), rnd.nextDouble(), rnd.nextDouble()));
-            OGPaint.getCurrentTab().drawImageAt(wi, 0, 0);
 
-        });
 
     }
 

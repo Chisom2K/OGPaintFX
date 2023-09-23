@@ -1,3 +1,32 @@
+Version 0.3.0 (9/22/23)
+New Features:
+	- New drawing tools!
+		- Freehand/"Pencil" - go crazy and draw everywhere
+		- Ellipse (with possible fill)
+		- Rectangles (with possible fill)
+			- Width on all shapes changes when you change 'Line Width'
+		- Square (with possible fill)
+		- Circle (with possible fill)
+		-Triangle 
+		- Text in any color you desire
+		
+	- Random Color!
+		- Don't know what color you want? Hit 'Random Color' until one
+		  catches your eye!
+	- Keyboard commands
+		- Alt+F/Alt+O/Alt+H opens all of the menu bar options
+		- Alt+S and Ctrl+S saves!
+		- Ctrl+[ zooms out and Ctrl+] zooms in
+	- New menu bar option
+		-Zoom in and zoom out now available!
+	- Text label
+		- Now you can see what color you're using
+Features in-progress:
+	-To place a an Icon in a label 
+	- Add a copy and Paste
+		
+Bugs:
+	-Triangle is a bit weirdly shaped(surely to be fixed soon)
 #---------------------------------------------------------------------------------------------#
 
 Version 0.2.0 (9/16/23)

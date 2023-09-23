@@ -28,7 +28,8 @@ public class OGMenuBar extends MenuBar {
 
         Menu file = new Menu("_File");
         MenuItem[] fileOptions = {new MenuItem("New file"), new MenuItem("Open file..."),
-                new MenuItem("Save file"),new MenuItem("Save file as..."), new MenuItem("_Exit")}; //All of my file suboptions
+                new MenuItem("Save file"),new MenuItem("Save file as..."), new MenuItem("Undo"),
+                new MenuItem("Redo"), new MenuItem("_Exit")}; //All of my file suboptions
 
         Menu options = new Menu("_Options");
         MenuItem[] optionsOptions = {new MenuItem("Zoom In"), new MenuItem("Zoom Out")};
@@ -66,6 +67,12 @@ public class OGMenuBar extends MenuBar {
             }catch(Exception ex){
                 System.out.println(ex);
             }
+        });
+        fileOptions[4].setOnAction((ActionEvent e) -> { //undo
+            OGPaint.getCurrentTab().undo();
+        });
+        fileOptions[5].setOnAction((ActionEvent e) -> { //redo
+            OGPaint.getCurrentTab().redo();
         });
 
         /* When the last item in the fileOptions array is clicked or activated,
@@ -105,14 +112,16 @@ public class OGMenuBar extends MenuBar {
             OGPaint.getCurrentTab().zoomOut();
         });
 
-       /* //lol keybinds down below
+        // keybinds down below
         fileOptions[1].setAccelerator(KeyCombination.keyCombination("Ctrl+O"));      //sets open option to Ctrl+O
-        fileOptions[2].setAccelerator(KeyCombination.keyCombination("Ctrl+S"));      //sets save option to Ctrl+S
+        fileOptions[3].setAccelerator(KeyCombination.keyCombination("Ctrl+S"));      //sets save option to Ctrl+S
+        fileOptions[5].setAccelerator(KeyCombination.keyCombination("Ctrl+Z"));      //sets undo to Ctrl+Z
+        fileOptions[6].setAccelerator(KeyCombination.keyCombination("Ctrl+A"));      //sets redo to Ctrl+A
         optionsOptions[0].setAccelerator(KeyCombination.keyCombination("Ctrl+]"));   //sets zoom in to Ctrl+]
         optionsOptions[1].setAccelerator(KeyCombination.keyCombination("Ctrl+["));   //sets zoom out to Ctrl+[
-        helpOptions[1].setAccelerator(KeyCombination.keyCombination("Ctrl+R"));      //sets release notes to Ctrl+R
+        helpOptions[2].setAccelerator(KeyCombination.keyCombination("Ctrl+R"));      //sets release notes to Ctrl+R
 
-        */
+
 
 
 

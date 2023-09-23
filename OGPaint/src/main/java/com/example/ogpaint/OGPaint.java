@@ -14,7 +14,8 @@ import javafx.stage.WindowEvent;
  */
 
 public class OGPaint extends Application {
-    public final static String IMAGE_FOLDER ="/Users/chisomogbuefi/Documents/CS250 paint/OGPaint/Images ";
+    //"/Users/chisomogbuefi/Documents/CS250 paint/OGPaint/Images ";
+    public final static String IMAGE_FOLDER ="/Users/chisomogbuefi/Documents/CS250\\ paint/OGPaint/Images\\";
 
     private final static String TITLE = "OGPaint";
     private final static String VER_NUM = "1.0";
@@ -33,7 +34,7 @@ public class OGPaint extends Application {
         toolbar = new OGToolBar();
         menubar = new OGMenuBar();
         BorderPane bp = new BorderPane();
-        VBox topbars = new VBox(toolbar, menubar);
+        VBox topbar = new VBox(menubar, toolbar);
         Scene scene = new Scene(bp, WINDOW_LENGTH, WINDOW_HEIGHT);
 
         mainStage.setOnCloseRequest((WindowEvent w) -> {
@@ -41,7 +42,7 @@ public class OGPaint extends Application {
             OGPopUp.createExitAlert(mainStage);
         });
         //Setting up layout
-        bp.setTop(topbars);
+        bp.setTop(topbar);
         bp.setCenter(tabpane);
 
         tabpane.getTabs().add(new OGTab());
