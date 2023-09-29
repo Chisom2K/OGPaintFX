@@ -56,14 +56,7 @@ public class OGTab extends Tab {
 
         chooseFile = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.jpeg", "*.png", "*.bmp");
-        /*chooseFile.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG ", "*.jpg"),
-                new FileChooser.ExtensionFilter("JPEG ", "*.jpeg"),
-                new FileChooser.ExtensionFilter("Bitmap", "*.bmp"),
-                new FileChooser.ExtensionFilter("Graphics Interchange Format", "*.gif")); //all of the extensions I "support"
 
-         */
 
         this.canvasPane = new Pane(canvas);
         this.canvasStack = new StackPane();

@@ -1,3 +1,15 @@
+#---------------------------------------------------------------------------------------------#
+
+Version 1.0.0 (9/30/21)
+New Features:
+	- New drawing tools!
+		- N-gon - an n sided polygon!
+	- Cut and Paste
+		- Use one to cut a section, another to paste what's in the clipboard
+	- Blank starter image
+Features in-progress:
+	- Icons on my random button
+#---------------------------------------------------------------------------------------------#
 Version 0.3.0 (9/22/23)
 New Features:
 	- New drawing tools!

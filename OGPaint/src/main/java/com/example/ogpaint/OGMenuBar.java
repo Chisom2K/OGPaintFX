@@ -89,7 +89,7 @@ public class OGMenuBar extends MenuBar {
                 System.out.println(ex);
             }
         });
-        helpOptions[1].setOnAction((ActionEvent e) -> {  //help window
+        helpOptions[1].setOnAction((ActionEvent e) -> {  //about window
             try {
                 OGPopUp.createTextWindow(new File(ABOUT_PATH), "About", 650, 350);
             } catch (FileNotFoundException ex) {

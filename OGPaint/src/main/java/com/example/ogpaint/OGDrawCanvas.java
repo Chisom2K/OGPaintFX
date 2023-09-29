@@ -126,6 +126,21 @@ public class OGDrawCanvas extends Canvas {
         this.gc.strokePolygon(xPoints, yPoints, n);
     }
 
+    public void drawText(String text, double x, double y){
+        double temp = this.gc.getLineWidth();   //text can't be drawn with lineWidths other than 1 or else it breaks
+        this.gc.setLineWidth(1);
+        if(this.getFillColor() == null){
+            this.setFillColor(this.getLineColor());
+            gc.fillText(text, x, y);
+            this.setFillColor(this.getFillColor());
+        }
+        else{
+            gc.fillText(text, x, y);
+        }
+        gc.strokeText(text, x, y);
+        this.gc.setLineWidth(temp);
+    }
+
     public void drawLine(double x1, double y1, double x2, double y2){gc.strokeLine(x1, y1, x2, y2);}
 
     /**

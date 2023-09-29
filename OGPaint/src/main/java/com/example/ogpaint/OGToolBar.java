@@ -24,8 +24,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 public class OGToolBar extends ToolBar {
-    private final static String[] DRAW_TOOLS = {"None", "Line", "Freehand", "Rectangle",
-             "Square", "Ellipse", "Circle","Triangle"};
+    private final static String[] DRAW_TOOLS = {"None", "Cut", "Copy", "Paste", "Eraser", "Text", "Line", "Freehand", "Rectangle",
+             "Square", "Ellipse", "Circle", "N-gon"};
     private final static Integer[] LINE_WIDTH_VALS = {1,2,5,10,15,20,25,50,100};
 
     private final Button RND_COLOR_BUTTON;
@@ -143,6 +143,8 @@ public class OGToolBar extends ToolBar {
      * @param zoomVal A double representing the zoom value (i.e. the scale of the canvas)
      */
     public static void setZoomLabel(double zoomVal){ zoomLabel.setText(String.format("%.1f", zoomVal * 100) + "%"); }
+
+    public static int getNumSides(){return usingNumSides;}
     public static String getCurrentTool(){ return DRAW_TOOLS[usingTool]; }
     /**
      * Gets the color from the line color picker

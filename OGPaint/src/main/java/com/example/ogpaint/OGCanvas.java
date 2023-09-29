@@ -46,6 +46,9 @@ public class OGCanvas extends OGDrawCanvas{
             this.setLineWidth(OGToolBar.getLineWidth());
             this.setFillShape(OGToolBar.getFillStatus());
             switch (OGToolBar.getCurrentTool()) {
+                case("Eraser"):
+                    this.setLineColor(Color.WHITE);
+                    break;
                 case("Line"):
                     this.drawLine(x, y, x, y);
                     this.updateStacks();
@@ -68,6 +71,30 @@ public class OGCanvas extends OGDrawCanvas{
                     break;
                 case("Circle"):
                     this.drawNgon(x, y, x, y, 314);
+                    this.updateStacks();
+                    break;
+                case("N-gon"):
+                    this.drawNgon(x, y, x, y, 5);
+                    this.updateStacks();
+                    break;
+                case("Cut"):
+                case("Copy"):
+                    this.setLineWidth(2);
+                    this.setFillShape(false);
+                    this.setLineColor(Color.BLACK);
+                    this.drawRect(x,y,x,y);
+                    this.updateStacks();
+                    break;
+                case("Paste"):
+                    try{
+                        this.drawImageAt(clipboard, e.getX(), e.getY());
+                    }catch(Exception f){
+                        System.out.println(e);
+                    }
+                    this.updateStacks();
+                    break;
+                case("Text"):
+                    this.drawText("Sample Text", e.getX(), e.getY());
                     this.updateStacks();
                     break;
             }
@@ -101,6 +128,16 @@ public class OGCanvas extends OGDrawCanvas{
                     //this.drawTriangle(x, y, e.getX(), e.getY(), x + (e.getX() - x) / 2, y);
                     this.updateStacks();
                     break;
+                case("Eraser"):
+                    this.drawLine(x, y, e.getX(), e.getY());
+                    x = e.getX();
+                    y = e.getY();
+                    break;
+                case("Text"):
+                    this.undo();
+                    this.drawText("Sample Text", e.getX(), e.getY());
+                    this.updateStacks();
+                    break;
                 case("Ellipse"):
                     this.undo();
                     this.drawEllipse(x,y,e.getX(),e.getY());
@@ -111,12 +148,41 @@ public class OGCanvas extends OGDrawCanvas{
                     this.drawNgon(x, y, e.getX(), e.getY(), 314);
                     this.updateStacks();
                     break;
+                case("N-gon"):
+                    this.undo();
+                    this.drawNgon(x, y, e.getX(), e.getY(), OGToolBar.getNumSides());
+                    this.updateStacks();
+                    break;
+                case("Cut"):
+                    this.undo();
+                    this.drawRect(x, y, e.getX(), e.getY());
+                    this.updateStacks();
+                    break;
+                case("Copy"):
+                    this.undo();
+                    this.drawRect(x, y, e.getX(), e.getY());
+                    this.updateStacks();
+                    break;
+                case("Paste"):
+                    this.undo();
+                    try{
+                        this.drawImageAt(clipboard, e.getX(), e.getY());
+                    }catch(Exception f){
+                        System.out.println(e);
+                    }
+                    this.updateStacks();
+                    break;
+
             }
 
         });
         this.setOnMouseReleased(e -> {
             switch (OGToolBar.getCurrentTool()) {
                 case ("Freehand"):
+                    this.drawLine(x, y, e.getX(), e.getY());
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+                case("Eraser"):
                     this.drawLine(x, y, e.getX(), e.getY());
                     OGPaint.getCurrentTab().setUnsavedChanges(true);
                     break;
@@ -150,6 +216,40 @@ public class OGCanvas extends OGDrawCanvas{
                     this.drawNgon(x, y, e.getX(), e.getY(), 314);
                     OGPaint.getCurrentTab().setUnsavedChanges(true);
                     break;
+                case("N-gon"):
+                    this.undo();
+                    this.drawNgon(x, y, e.getX(), e.getY(), OGToolBar.getNumSides());
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+                case("Text"):
+                    this.undo();
+                    this.drawText("Sample Text", e.getX(), e.getY());
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+                case("Cut"):
+                    this.undo();
+                    this.clipboard = this.getRegion(x, y, e.getX(), e.getY());
+                    this.setLineWidth(1);
+                    this.setFillShape(true);
+                    this.setLineColor(OGToolBar.getFillColor());
+                    this.drawRect(x, y, e.getX(), e.getY());
+                    this.updateStacks();
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+                case("Copy"):
+                    this.undo();
+                    this.clipboard = this.getRegion(x, y, e.getX(), e.getY());
+                    this.updateStacks();
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+                case("Paste"):
+                    this.undo();
+                    if(this.clipboard != null){
+                        this.drawImageAt(this.clipboard, e.getX(), e.getY());
+                    }
+                    OGPaint.getCurrentTab().setUnsavedChanges(true);
+                    break;
+
             }
 
             OGPaint.getCurrentTab().updateTabTitle();
