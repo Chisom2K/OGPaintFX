@@ -2,6 +2,8 @@ package com.example.ogpaint;
 
 import java.util.Stack;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 
@@ -288,6 +290,10 @@ public class OGCanvas extends OGDrawCanvas{
         undoStack.push(this.getRegion(0,0, this.getWidth(), this.getHeight()));
         redoStack.clear();  //clear redo every time to avoid problems with breaking time
     }
+
+
+
+
 
 
 
