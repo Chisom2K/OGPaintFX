@@ -1,12 +1,18 @@
 package com.example.ogpaint;
 
-import java.io.File;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.scene.control.ScrollPane;
@@ -22,15 +28,27 @@ import javax.imageio.ImageIO;
  * @author Chisom Ogbuefi
  */
 public class OGTab extends Tab {
+
+    public final static String AUTOSAVE_DIR = System.getProperty("user.home") + File.separator + "OGPaint" + File.separator;
     public Pane canvasPane;   //static
+    public final static String LOGS_PATH = "logs.txt";
+
+    private final static int MILS_IN_SECS = 1000;
     private static FileChooser chooseFile;
+
+    private int autosaveSecs;
+    private double scale;
+    private boolean unsavedChanges;
     private File path;
     private String title;
     private OGCanvas canvas;
-    private boolean unsavedChanges;
-    private double scale;
+    private Image autosaveBackup;
     private ScrollPane scroll;
     private StackPane canvasStack;
+    private Timer autosaveTimer;
+    private TimerTask autosave;
+    private Timer loggerTimer;
+    private TimerTask logger;
 
     public OGTab(){
         super();
@@ -75,6 +93,91 @@ public class OGTab extends Tab {
 
         this.scroll.setPrefViewportWidth(this.canvas.getWidth()/2);
         this.scroll.setPrefViewportHeight(this.canvas.getHeight()/2);
+
+        this.autosaveSecs = 30;
+        this.autosaveTimer = new Timer();
+        this.autosave = new TimerTask(){
+            @Override
+            public void run(){
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        autosaveImage();
+                        autosaveTimer.schedule(autosave, 0, autosaveSecs*MILS_IN_SECS);
+                    }
+                });
+            }
+        };
+        this.autosaveTimer.schedule(this.autosave, 30000, this.autosaveSecs*MILS_IN_SECS);
+
+        this.loggerTimer = new Timer();
+        this.logger = new TimerTask(){
+            @Override
+            public void run(){
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        File loggerFile = new File(LOGS_PATH);
+                        try{
+                            loggerFile.createNewFile();
+                        } catch(Exception ex){
+                            System.out.println(ex);
+                        }
+                        try{
+                            FileWriter fw = new FileWriter(LOGS_PATH, true);
+                            BufferedWriter bw = new BufferedWriter(fw);
+                            bw.write(OGToolBar.getCurrentTool() + " | " + LocalDate.now() + " | " + LocalTime.now());
+                            bw.newLine();
+                            bw.close();
+                        }
+                        catch(Exception ex){
+                            System.out.println(ex);
+                        }
+                    }
+                });
+            }
+        };
+        this.loggerTimer.scheduleAtFixedRate(this.logger, 5000, 30000);
+    }
+    /**
+     * Autosaves the image in autosaveBackup to the specified autosave directory
+     */
+    public void autosaveImage(){
+        if(this.unsavedChanges && this.path != null) {
+            this.autosaveBackup = this.canvas.getRegion(0, 0, this.canvas.getWidth(), this.canvas.getHeight()); //snapshot of the current canvas
+            File backupFile = new File(AUTOSAVE_DIR + LocalDate.now() + Instant.now().toEpochMilli() + ".png");
+            try {                           //backup path is just date + time in secs since epoch and then the .png file type
+                backupFile.createNewFile();
+                ImageIO.write(SwingFXUtils.fromFXImage(this.autosaveBackup, null),
+                        "png",
+                        new FileOutputStream(backupFile));
+                System.out.println("Autosaved!");
+            } catch (IOException ex) {
+                Logger.getLogger(OGTab.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    /**
+     * Updates the timer on the autosave task which allows user to change interval
+     */
+    public void updateAutosaveTimer(){
+        this.autosaveSecs = OGToolBar.getAutosaveTime();
+        this.autosave.cancel();
+        this.autosaveTimer.purge();
+        this.autosave = new TimerTask(){
+            @Override
+            public void run(){
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        autosaveImage();
+                        autosaveTimer.schedule(autosave, 0, autosaveSecs*MILS_IN_SECS);
+                    }
+                });
+            }
+        };
+        this.autosaveTimer.schedule(this.autosave, 0, this.autosaveSecs*MILS_IN_SECS);
+
     }
 
     public OGCanvas getCanvas(){return this.canvas;}

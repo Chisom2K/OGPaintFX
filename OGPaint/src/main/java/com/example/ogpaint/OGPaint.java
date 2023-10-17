@@ -15,7 +15,8 @@ import javafx.stage.WindowEvent;
 
 public class OGPaint extends Application {
     //"/Users/chisomogbuefi/Documents/CS250 paint/OGPaint/Images ";
-    public final static String IMAGE_FOLDER ="/Users/chisomogbuefi/Documents/CS250\\ paint/OGPaint/Images\\";
+    public final static String IMAGE_FOLDER ="OGPaint/Images";
+            //"/Users/chisomogbuefi/Documents/CS250\\ paint/OGPaint/Images\\";
 
     private final static String TITLE = "OGPaint";
     private final static String VER_NUM = "1.0";

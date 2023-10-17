@@ -3,20 +3,13 @@ package com.example.ogpaint;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -36,12 +29,14 @@ public class OGToolBar extends ToolBar {
     private static ColorPicker fillColorPicker;
     private static ColorPicker lineColorPicker;
     private static TextField numSides;
+    private static TextField autosaveTime;
     private static Label zoomLabel;
     private static CheckBox setFill;
     private Random rnd;
     private static int usingWidth;
     private static int usingTool;
     private static int usingNumSides;
+    private static int usingTime;
 
 
 
@@ -56,6 +51,7 @@ public class OGToolBar extends ToolBar {
         RND_COLOR_BUTTON = new Button("");
 
         numSides = new TextField("3");
+        autosaveTime = new TextField(Integer.toString(usingTime));
         toolsBox = new ComboBox<>(FXCollections.observableArrayList(DRAW_TOOLS));
         widthsBox = new ComboBox<>(FXCollections.observableArrayList(LINE_WIDTH_VALS));
         zoomLabel = new Label("100%");
@@ -67,7 +63,7 @@ public class OGToolBar extends ToolBar {
         getItems().addAll(new Label(" Tools: "), toolsBox, new Separator(),
                 new Label(" Line Color: "), lineColorPicker, new Label(" Fill Color: "),
                 fillColorPicker, RND_COLOR_BUTTON, new Separator(), new Label("Zoom: "), zoomLabel,new Separator(), new Label(" Line Width: "), widthsBox, new Label(" Fill "),
-                setFill, new Separator());
+                setFill, new Separator(), new Label("Autosave every "), autosaveTime, new Label(" seconds"));
 
         //setting the default values for things that look bad w/o them
         lineColorPicker.setValue(Color.BLACK);
@@ -81,19 +77,29 @@ public class OGToolBar extends ToolBar {
         numSides.setVisible(false);
         numSides.setPrefWidth(55);
 
+        autosaveTime.setPrefWidth(55);
+
 
         RND_COLOR_BUTTON.setTooltip(new Tooltip("Random Fill and Line Color"));
 
 
-        try {
+        /*try {
             //setting graphics on buttons
             int size = 30;
-        RND_COLOR_BUTTON.setGraphic(new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png"), size, size, true, true)));
+        RND_COLOR_BUTTON.setGraphic(new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png)"), size, size, true, true)));
+            //RND_COLOR_BUTTON.setGraphic(new ImageView(new Image(Objects.requireNonNull(OGPaint.class.getResourceAsStream("Images/head.png")))));
+                //new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png"), size, size, true, true)));
         //new ImageView(new Image(new FileInputStream(OGPaint.IMAGE_FOLDER + "head.png)"), size, size, true, true))
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(OGToolBar.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
+        ImageView RND = new ImageView(new Image(Objects.requireNonNull(OGPaint.class.getResourceAsStream("Images/head.png"))));
+        RND.setFitHeight(15);
+        RND.setFitWidth(15);
+        RND.setPreserveRatio(true);
+        RND_COLOR_BUTTON.setGraphic(RND);
+        RND_COLOR_BUTTON.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
 
         //listeners
@@ -121,6 +127,14 @@ public class OGToolBar extends ToolBar {
                 numSides.setText("3");
             }
         });     //listens and returns num of sides to use in ngon
+        autosaveTime.textProperty().addListener((observable, value, newValue) -> {
+            if(Integer.parseInt(newValue) >= 1)
+                usingTime = Integer.parseInt(newValue);
+            else{
+                autosaveTime.setText("1");
+            }
+            OGPaint.getCurrentTab().updateAutosaveTimer();
+        });     //listens and returns time
 
         widthsBox.setOnAction((ActionEvent e) -> {   //changes the value of usingWidth when the ComboBox is used/value changes
             usingWidth = widthsBox.getValue();
@@ -176,6 +190,8 @@ public class OGToolBar extends ToolBar {
      * @return The boolean value representative of whether the check box is checked
      */
     public static boolean getFillStatus(){ return setFill.isSelected();}
+
+    public static int getAutosaveTime(){return usingTime;}
 
 
 }
